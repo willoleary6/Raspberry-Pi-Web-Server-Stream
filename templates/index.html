@@ -1,9 +1,54 @@
 <html> 
+<style>
+body {
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+#content {
+  display: center;
+  align-items: left;
+  transition: all 1s ease-in-out;
+}
+
+button {
+  width: 10%;
+  height: 5%;
+  background: grey;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  text-decoration: none;
+}
+
+a {
+  color: white;
+  text-decoration: none;
+}
+</style>
+<script>
+var rot = 180;
+
+function rotateImages(){
+	document.getElementsByName("image").forEach(
+		function(ele, idx){
+			ele.style = 'transform: rotateZ(' + rot + 'deg)';
+		}
+	);
+	rot+=180;	
+}
+</script>
+
  <head> 
    <title>Video Streaming </title> 
  </head> 
  <body> 
-   <h1> Live Video Streaming </h1> 
-   <img src="{{ url_for('video_feed') }}"> 
+        <h1> Live Video Streaming </h1> 
+   	<div id="content">
+  		 <img name ="image" src="{{ url_for('video_feed') }}">
+		<img name ="image" src="{{ url_for('video_feed') }}">
+				 
+	</div>
+	<button type="button" id ="btn" onclick="rotateImages()">Rotate 180 Degrees</button>
  </body> 
 </html> 
