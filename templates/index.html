@@ -19,6 +19,11 @@ button {
   justify-content: center;
   color: white;
   text-decoration: none;
+  margin: 5%;
+}
+
+image {
+  margin: 5%;
 }
 
 a {
@@ -27,7 +32,7 @@ a {
 }
 </style>
 <script>
-var rot = 180;
+var rot = 90;
 
 function rotateImages(){
 	document.getElementsByName("image").forEach(
@@ -35,7 +40,7 @@ function rotateImages(){
 			ele.style = 'transform: rotateZ(' + rot + 'deg)';
 		}
 	);
-	rot+=180;	
+	rot+=90;	
 }
 </script>
 
@@ -45,10 +50,8 @@ function rotateImages(){
  <body> 
         <h1> Live Video Streaming </h1> 
    	<div id="content">
-  		 <img name ="image" src="{{ url_for('video_feed') }}">
-		<img name ="image" src="{{ url_for('video_feed') }}">
-				 
+  		 <img name ="image" src="{{ url_for('video_feed') }}">		 
 	</div>
-	<button type="button" id ="btn" onclick="rotateImages()">Rotate 180 Degrees</button>
+	<button type="button" id ="btn" onclick="rotateImages()">Rotate 90 Degrees</button>
  </body> 
 </html> 

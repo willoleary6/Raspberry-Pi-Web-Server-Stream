@@ -2,7 +2,6 @@ from imutils.video import VideoStream
 from flask import Flask
 from flask import render_template
 from flask import Response
-from datetime import datetime
 import threading
 import cv2
 
@@ -27,37 +26,16 @@ def video_feed():
 def capture_image():
     # grab global references to the video stream, output frame, and
 	# lock variables
-	global camera,outputFrame, lock
+# get frame
+timestamp = time.time() - starttime
+cv2.putText(frame,timestamp,(10,500), font, 4,(255,255,255),2,cv2.CV_AA)	global camera,outputFrame, lock
     # loop over frames from the video stream
 	while True:
 		# read the next frame from the video stream, resize it,
 		# convert the frame to grayscale, and blur it
 		frame = camera.read()
 		image = cv2.rotate(frame, cv2.ROTATE_180)
-		# get frame
-		timestamp = datetime.now()
-		# font 
-		font = cv2.FONT_HERSHEY_SIMPLEX 
 		
-		# org 
-		org = (300, 400) 
-		  
-		# fontScale 
-		fontScale = .75
-		   
-		# White color in BGR 
-		color = (255, 255, 255) 
-		  
-		# Line thickness of 1 px 
-		thickness = 1
-		   
-		# Using cv2.putText() method 
-		image = cv2.putText(
-				image, 
-				timestamp.strftime("%Y/%m/%d - %H:%M:%S"), 
-				org, 
-				font,  
-		                fontScale, color, thickness, cv2.LINE_AA) 
 		# acquire the lock, set the output frame, and release the
 		# lock
 		with lock:
