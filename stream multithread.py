@@ -14,21 +14,20 @@ outputFrame = None
 lock = threading.Lock()
 camera = VideoStream(src=0).start()
 
-
 @app.route('/')
 def index():
-    return render_template('index.html')
+	return render_template('index.html')
 
 @app.route('/video_feed')
 def video_feed():
-    return Response(gen(), mimetype='multipart/x-mixed-replace; boundary=frame')
+	return Response(gen(), mimetype='multipart/x-mixed-replace; boundary=frame')
 
 
 def capture_image():
-    # grab global references to the video stream, output frame, and
+	# grab global references to the video stream, output frame, and
 	# lock variables
 	global camera,outputFrame, lock
-    # loop over frames from the video stream
+        # loop over frames from the video stream
 	while True:
 		# read the next frame from the video stream, resize it,
 		# convert the frame to grayscale, and blur it
@@ -62,24 +61,30 @@ def capture_image():
 		# lock
 		with lock:
 			outputFrame = image
+			out = cv2.VideoWriter('/home/pi/Videos/outpy.avi',cv2.VideoWriter_fourcc('M','J','P','G'), 10, (640,480))
+			out.write(outputFrame)
+			out.release()
+			
+
 
 def gen():
-    while True:
-        #ret, img = camera.read()
-        ret= True
-        if ret:
-            test = cv2.imencode('.jpg', outputFrame)[1].tobytes()
-            yield (b'--frame\r\n'b'Content-Type: image/jpeg\r\n\r\n' + test + b'\r\n')
-        else:
-            break
+	while True:
+		#ret, img = camera.read()
+		ret= True
+		if ret:
+			test = cv2.imencode('.jpg', outputFrame)[1].tobytes()
+			#out.release()    
+			yield (b'--frame\r\n'b'Content-Type: image/jpeg\r\n\r\n' + test + b'\r\n')
+		else:
+			break
 
 # check to see if this is the main thread of execution
 if __name__ == '__main__':
-    # start a thread that will perform video capture
+	# start a thread that will perform video capture
 	t = threading.Thread(target=capture_image)
 	t.daemon = True
 	t.start()
-    # start the flask app
+	# start the flask app
 	app.run(host='0.0.0.0', port=7070, debug=True,
 		threaded=True, use_reloader=False)
 # release the video stream pointer
